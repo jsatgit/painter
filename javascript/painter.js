@@ -29,6 +29,18 @@ $(document).ready(function() {
     }
   });
 
+  $canvas.on('touchstart', function(event) {
+    var x = event.originalEvent.touches[0].clientX;
+    var y = event.originalEvent.touches[0].clientY;
+    dragStart = [x, y];
+  });
+
+  $canvas.on('touchmove', function(event) {
+    var x = event.originalEvent.touches[0].clientX;
+    var y = event.originalEvent.touches[0].clientY;
+    onDragMove(x, y);
+  });
+
   function onDragStart(x, y) {
     dragStart = [x, y];
   }
