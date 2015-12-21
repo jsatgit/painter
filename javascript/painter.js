@@ -3,12 +3,8 @@ $(document).ready(function() {
   $canvas.svg();
   var svg = $canvas.svg('get');
   var isMouseDown = false;
-  var dragStart;
-
-  $canvas.mousedown(function(event) {
-    isMouseDown = true;
-    onDragStart(event.clientX, event.clientY);
-  });
+  var points = [];
+  var path = svg.createPath();
 
   $canvas.mouseup(function() {
     isMouseDown = false;
@@ -23,6 +19,11 @@ $(document).ready(function() {
     isMouseIn = true;
   });
 
+  $canvas.mousedown(function(event) {
+    isMouseDown = true;
+    onDragStart(event.clientX, event.clientY);
+  });
+
   $canvas.mousemove(function(event) {
     if (isMouseIn && isMouseDown) {
       onDragMove(event.clientX, event.clientY);
@@ -33,7 +34,7 @@ $(document).ready(function() {
     event.preventDefault();
     var x = event.originalEvent.touches[0].clientX;
     var y = event.originalEvent.touches[0].clientY;
-    dragStart = [x, y];
+    onDragStart(x, y)
   });
 
   $canvas.on('touchmove', function(event) {
@@ -44,13 +45,22 @@ $(document).ready(function() {
   });
 
   function onDragStart(x, y) {
-    dragStart = [x, y];
+    points = [[x, y]];
   }
 
   function onDragMove(x, y) {
-    var path = svg.createPath(); 
-    svg.path(path.move(dragStart[0], dragStart[1]).line(x, y).close(), {stroke: 'red', strokeWidth: 2});
-    dragStart = [x, y];
+    if (points.length < 4) {
+      points.push([x, y]);
+    } else {
+      var mid = [(points[2][0] + x) / 2, (points[2][1] + y) / 2]
+      path.reset();
+      svg.path(path.move(points[0][0], points[0][1])
+                   .curveC(points[1][0], points[1][1],
+                           points[2][0], points[2][1],
+                           mid[0], mid[1])
+                   , {stroke: 'red', strokeWidth: 2, fill:'transparent'});
+      points = [mid, [x, y]];
+    }
   }
 
   function drawCircle(x, y) {
