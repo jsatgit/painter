@@ -44,6 +44,39 @@ $(document).ready(function() {
     onDragMove(x, y);
   });
 
+  $(document).keypress(function(event) {
+    var key = String.fromCharCode(event.which);
+    var action = keyToAction[key];
+    if (action) {
+      action();
+    }
+  });
+
+  function clear() {
+    svg.clear(true);
+  }
+
+  var stack = [];
+
+  function undo() {
+    var last = $('.canvas svg').children().last();
+    stack.push(last);
+    last.remove();
+  }
+
+  function redo() {
+    var lastStroke = stack.pop();
+    if (lastStroke) {
+      $('.canvas svg').append(lastStroke);
+    }
+  }
+
+  var keyToAction = {
+    'c': clear,
+    'u': undo,
+    'r': redo
+  }
+
   function onDragStart(x, y) {
     points = [[x, y]];
   }
