@@ -53,7 +53,7 @@ $(document).ready(function() {
   });
 
   function clear() {
-    svg.clear(true);
+    svg.clear();
   }
 
   var stack = [];
