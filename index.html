@@ -5,12 +5,28 @@
         <title>Painter</title>
         <link rel='stylesheet' href='css/painter.css' type='text/css'>
         <link rel='stylesheet' href='css/jquery.svg.css' type='text/css'>
+        <link rel='stylesheet' href='css/bootstrap.min.css' type='text/css'>
+        <link rel='stylesheet' href='css/bootstrap-colorpicker.min.css' type='text/css'>
         <script type='text/javascript' src='javascript/vendor/jquery-2.1.4.min.js'></script>
         <script type='text/javascript' src='javascript/vendor/jquery.svg.min.js'></script>
+        <script type='text/javascript' src='javascript/vendor/bootstrap.min.js'></script>
+        <script type='text/javascript' src='./javascript/vendor/bootstrap-colorpicker.min.js'></script>
         <script type='text/javascript' src='javascript/painter.js'></script>
     </head>
     <body>
         <div class='canvas'>
         </div>
+		<div class="modal fade" id="settings" tabindex="-1" role="dialog" aria-labelledby="settingsLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="input-group brush-colorpicker">
+							<input type="text" value="" class="form-control" />
+							<span class="input-group-addon"><i></i></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
     </body>
 </html>

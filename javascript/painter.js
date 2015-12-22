@@ -6,6 +6,15 @@ $(document).ready(function() {
   var points = [];
   var path = svg.createPath();
   var strokeWidth = 5;
+  var brushColor = 'red';
+
+  $('.brush-colorpicker').colorpicker({color: brushColor}).on('changeColor.colorpicker', function(event){
+      brushColor = event.color.toHex();
+  });
+
+  $('#settings').on('hide.bs.modal', function (e) {
+    $('.brush-colorpicker').colorpicker('hide');
+  });
 
   $canvas.mouseleave(function() {
     isMouseIn = false;
@@ -79,29 +88,33 @@ $(document).ready(function() {
     }
   }
 
+  function settings() {
+    $('#settings').modal('toggle');
+  }
+
   var keyToAction = {
     'c': clear,
     'u': undo,
-    'r': redo
+    'r': redo,
+    's': settings
   }
 
   function onDragStart(x, y) {
     points = [[x, y]];
-    svg.circle(x, y, strokeWidth/2, {fill: 'red'});
+    svg.circle(x, y, strokeWidth/2, {fill: brushColor});
   }
-
-  var properties = {
-    stroke: 'red',
-    strokeWidth: strokeWidth,
-    fill:'transparent'
-  };
-  properties['stroke-linecap'] = 'round';
 
   function onDragMove(x, y) {
     if (points.length < 4) {
       points.push([x, y]);
     } else {
       var mid = [(points[2][0] + x) / 2, (points[2][1] + y) / 2]
+      var properties = {
+          stroke: brushColor,
+          strokeWidth: strokeWidth,
+          fill:'transparent'
+      };
+      properties['stroke-linecap'] = 'round';
       path.reset();
       svg.path(path.move(points[0][0], points[0][1])
                    .curveC(points[1][0], points[1][1],
