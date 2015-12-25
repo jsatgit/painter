@@ -8,8 +8,10 @@ $(document).ready(function() {
   var strokeWidth = 5;
   var brushColor = 'red';
 
+  changeCursor(brushColor);
   $('.brush-colorpicker').colorpicker({color: brushColor}).on('changeColor.colorpicker', function(event){
       brushColor = event.color.toHex();
+      changeCursor(brushColor);
   });
 
   $('#settings').on('hide.bs.modal', function (e) {
@@ -71,18 +73,31 @@ $(document).ready(function() {
 
   function clear() {
     svg.clear();
+    stack = [];
   }
 
   var stack = [];
+  var STACK_LIMIT = 20;
+
+  function pushPaintStack(stroke) {
+    stack.push(stroke);
+    if (stack.length > STACK_LIMIT) {
+      stack.shift();
+    }
+  }
+
+  function popPaintStack() {
+    return stack.pop();
+  }
 
   function undo() {
     var last = $('.canvas svg').children().last();
-    stack.push(last);
+    pushPaintStack(last);
     last.remove();
   }
 
   function redo() {
-    var lastStroke = stack.pop();
+    var lastStroke = popPaintStack();
     if (lastStroke) {
       $('.canvas svg').append(lastStroke);
     }
@@ -123,5 +138,22 @@ $(document).ready(function() {
                    , properties);
       points = [mid, [x, y]];
     }
+  }
+
+  function changeCursor(color) {
+    var strokeRadius = strokeWidth / 2;
+    var cursor = document.createElement('canvas');
+    var ctx = cursor.getContext('2d');
+
+    cursor.width = strokeWidth;
+    cursor.height = strokeWidth;
+
+    ctx.strokeStyle = color;
+    ctx.beginPath();
+    ctx.arc(strokeRadius, strokeRadius, strokeRadius, 0, Math.PI*2, true);
+    ctx.fillStyle = color
+    ctx.fill();
+
+    $canvas.css('cursor', 'url(' + cursor.toDataURL() + '), auto');
   }
 });
