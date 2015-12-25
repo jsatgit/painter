@@ -11,3 +11,7 @@ html, body {
     background: rgb(53, 56, 57);
     cursor: default;
 }
+
+.slider {
+    width: 100% !important;
+}

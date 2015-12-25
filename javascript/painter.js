@@ -8,10 +8,19 @@ $(document).ready(function() {
   var strokeWidth = 5;
   var brushColor = 'red';
 
-  changeCursor(brushColor);
+  changeCursor(brushColor, strokeWidth);
   $('.brush-colorpicker').colorpicker({color: brushColor}).on('changeColor.colorpicker', function(event){
       brushColor = event.color.toHex();
-      changeCursor(brushColor);
+      changeCursor(brushColor, strokeWidth);
+  });
+
+  var brushSizeSlider = $(".brush-slider").slider({
+    min: 1,
+    max: 100,
+    value: 5
+  }).on('change', function(event) {
+    strokeWidth = event.value.newValue;
+    changeCursor(brushColor, strokeWidth);
   });
 
   var isInModalToggle = false;
@@ -157,19 +166,20 @@ $(document).ready(function() {
     }
   }
 
-  function changeCursor(color) {
-    var strokeRadius = strokeWidth / 2;
+  function changeCursor(color, width) {
+    var strokeRadius = width / 2;
     var cursor = document.createElement('canvas');
     var ctx = cursor.getContext('2d');
 
-    cursor.width = strokeWidth;
-    cursor.height = strokeWidth;
+    cursor.width = width;
+    cursor.height = width;
 
     ctx.strokeStyle = color;
     ctx.beginPath();
     ctx.arc(strokeRadius, strokeRadius, strokeRadius, 0, Math.PI*2, true);
     ctx.fillStyle = color
     ctx.fill();
+    ctx.translate(-strokeRadius, -strokeRadius);
 
     $canvas.css('cursor', 'url(' + cursor.toDataURL() + '), auto');
   }
