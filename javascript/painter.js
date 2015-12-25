@@ -181,6 +181,6 @@ $(document).ready(function() {
     ctx.fill();
     ctx.translate(-strokeRadius, -strokeRadius);
 
-    $canvas.css('cursor', 'url(' + cursor.toDataURL() + '), auto');
+    $canvas.css('cursor', 'url(' + cursor.toDataURL() + ') ' + strokeRadius + ' ' + strokeRadius + ' ,auto');
   }
 });
