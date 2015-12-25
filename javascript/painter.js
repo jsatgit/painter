@@ -7,6 +7,11 @@ $(document).ready(function() {
   var path = svg.createPath();
   var strokeWidth = 5;
   var brushColor = 'red';
+  var backgroundColor = '#353839';
+
+  function setBackgroundColor(color) {
+    $canvas.css('background', color);
+  }
 
   changeCursor(brushColor, strokeWidth);
   $('.brush-colorpicker').colorpicker({color: brushColor}).on('changeColor.colorpicker', function(event){
@@ -14,7 +19,7 @@ $(document).ready(function() {
       changeCursor(brushColor, strokeWidth);
   });
 
-  var brushSizeSlider = $(".brush-slider").slider({
+  var brushSizeSlider = $('.brush-slider').slider({
     min: 1,
     max: 100,
     value: 5
@@ -22,6 +27,13 @@ $(document).ready(function() {
     strokeWidth = event.value.newValue;
     changeCursor(brushColor, strokeWidth);
   });
+
+  setBackgroundColor(backgroundColor);
+  $('.background-colorpicker').colorpicker({color: backgroundColor})
+    .on('changeColor.colorpicker', function(event){
+      color = event.color.toHex();
+      setBackgroundColor(color);
+    });
 
   var isInModalToggle = false;
 
