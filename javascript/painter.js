@@ -14,8 +14,23 @@ $(document).ready(function() {
       changeCursor(brushColor);
   });
 
+  var isInModalToggle = false;
+
   $('#settings').on('hide.bs.modal', function (e) {
     $('.brush-colorpicker').colorpicker('hide');
+    isInModalToggle = true;
+  });
+
+  $('#settings').on('hidden.bs.modal', function() {
+    isInModalToggle = false;
+  });
+
+  $('#settings').on('show.bs.modal', function() {
+    isInModalToggle = true;
+  });
+
+  $('#settings').on('shown.bs.modal', function() {
+    isInModalToggle = false;
   });
 
   $canvas.mouseleave(function() {
@@ -104,7 +119,9 @@ $(document).ready(function() {
   }
 
   function settings() {
-    $('#settings').modal('toggle');
+    if (!isInModalToggle) {
+      $('#settings').modal('toggle');
+    }
   }
 
   var keyToAction = {
